@@ -23,23 +23,23 @@ function App() {
 
   useEffect(() => {
     const getTokenFromUrl = () => {
-      return window.location.hash
-        .substring(1)
-        .split("&")
-        .reduce((initial, item) => {
-          let parts = item.split("=");
-          initial[parts[0]] = decodeURIComponent(parts[1]);
-          return initial;
-        }, {});
+      let url = new URL(window.location);
+      return url.searchParams.get("state");
     };
 
-    const token = getTokenFromUrl().access_token;
+    const token = getTokenFromUrl();
 
     if (token) {
+      console.log(token);
       setAccessToken(token);
+      fetch("https://oauth.reddit.com/api/v1/me", {
+        method: "GET",
+        headers: { Authorization: `bearer ${token}` },
+      }).then((response) => console.log(response));
     } else {
       console.log("b happens");
-      const scope = "read";
+      const scope =
+        "identity edit flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread";
 
       let url = "https://www.reddit.com/api/v1/authorize";
       url += "?client_id=" + encodeURIComponent(process.env.REACT_APP_CLIENTID);

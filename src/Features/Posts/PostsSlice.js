@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { category } from "../Subreddits/SubredditsSlice";
 
 let initialState = [
@@ -14,15 +14,19 @@ async function connection() {
     headers: {},
   });
 }
-// https://www.reddit.com/api/v1/authorize?client_id=fJxQjMqatVbP8cplZ5JGMA&response_type=code&state=oK41wUFFS9In9bho&redirect_uri=http://localhost:3000&duration=permanent&scope=read
-//https://www.reddit.com/api/v1/authorize?client_id=fJxQjMqatVbP8cplZ5JGMA&response_type=code&state=pkutXCAKMfFvECNU&redirect_uri=http%3A%2F%2Flocalhost%3A3000&duration=permanent&scope=identity
-//https://www.reddit.com/api/v1/authorize?client_id=CLIENT_ID&response_type=TYPE&state=RANDOM_STRING&redirect_uri=URI&duration=DURATION&scope=SCOPE_STRING
-// identity, edit, flair, history, modconfig, modflair, modlog, modposts, modwiki, mysubreddits, privatemessages, read, report, save, submit, subscribe, vote, wikiedit, wikiread
 
+const getInitialState = createAsyncThunk("Posts/getInitialState", async () => {
+  //GET [/r/subreddit]/search
+  let request = await fetch("", {
+    method: "GET",
+  });
+  request = request.json();
+  return request;
+});
 
 const slice = createSlice({
   name: "Posts",
-  initialState: initialState,
+  initialState: { posts: initialState, hasError: false, isLoading: false },
   reducers: {
     search: (state, action) => {
       state.filter((item) => {
@@ -30,11 +34,23 @@ const slice = createSlice({
       });
     },
   },
-  //   extraReducers: {
-  //     [category]: (state, action) => {},
-  //   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getInitialState.pending, (state) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(getInitialState.rejected, (state) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(getInitialState.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.hasError = false;
+      });
+  },
 });
 
 export default slice.reducer;
 export const { search } = slice.actions;
-export const getPosts = (state) => state.postsSlice;
+export const getPosts = (state) => state.postsSlice.posts;
