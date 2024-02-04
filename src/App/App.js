@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
+  const [authorizationToken, setAuthorizationToken] = useState("");
 
   function generateRandomString(length) {
     var text = "";
@@ -24,7 +25,7 @@ function App() {
   useEffect(() => {
     const getTokenFromUrl = () => {
       let url = new URL(window.location);
-      return url.searchParams.get("state");
+      return url.searchParams.get("code");
     };
 
     const token = getTokenFromUrl();
@@ -32,10 +33,30 @@ function App() {
     if (token) {
       console.log(token);
       setAccessToken(token);
-      fetch("https://oauth.reddit.com/api/v1/me", {
-        method: "GET",
-        headers: { Authorization: `bearer ${token}` },
-      }).then((response) => console.log(response));
+      fetch("https://www.reddit.com/api/v1/access_token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization:
+            "Basic " +
+            btoa(
+              process.env.REACT_APP_CLIENTID +
+                ":" +
+                process.env.REACT_APP_CLIENTSECRET
+            ),
+        },
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
+          code: accessToken,
+          redirect_uri: process.env.REACT_APP_REDIRECT_URI,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          console.log("This is the real access token!");
+        })
+        .catch((error) => console.error("Error:", error));
     } else {
       console.log("b happens");
       const scope =
@@ -59,7 +80,7 @@ function App() {
       <div id="logo">
         <p>REDDITCLIENT</p>
       </div>
-      <Subreddit></Subreddit>
+      <Subreddit token={accessToken}></Subreddit>
       <Search></Search>
       <Posts></Posts>
     </div>
