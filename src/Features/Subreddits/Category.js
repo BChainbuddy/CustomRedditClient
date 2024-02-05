@@ -1,6 +1,10 @@
-export default function Category({ item }) {
+export default function Category({ item, posts }) {
   return (
-    <div>
+    <div
+      onClick={() => {
+        posts(item);
+      }}
+    >
       <p>{item}</p>
     </div>
   );

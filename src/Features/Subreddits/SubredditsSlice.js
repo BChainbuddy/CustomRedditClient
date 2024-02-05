@@ -8,18 +8,25 @@ export const getPopularSubreddits = createAsyncThunk(
       method: "GET",
       headers: {
         Authorization: `bearer ${token}`,
-        "User-Agent": "RedditClientv1.0",
+        "User-Agent":
+          "android:com.example.redditclient:v1.0.0 (by /u/bchainbuddy)",
       },
     };
 
-    const url = "https://oauth.reddit.com/subreddits/popular?limit=100";
+    const url = "https://oauth.reddit.com/subreddits/popular?limit=10";
 
     const response = await fetch(url, params);
-    console.log(response);
-    //   .then((response) => response.json())
-    //   .then((data) => console.log(data))
-    //   .catch((error) => console.error("Error:", error));
-    // console.log("It has happened!");
+    const data = await response.json();
+    console.log(data.data.children);
+    let list = [];
+
+    data.data.children.forEach((item) => {
+      list.push(item.data.display_name);
+    });
+
+    console.log("Works!");
+    console.log(list);
+    return list;
   }
 );
 
@@ -48,7 +55,7 @@ const slice = createSlice({
       .addCase(getPopularSubreddits.fulfilled, (state, action) => {
         state.isLoading = false;
         state.hasError = false;
-        state.categories.push(action);
+        state.categories = action.payload;
       });
   },
 });

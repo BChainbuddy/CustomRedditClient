@@ -2,22 +2,33 @@ import { useEffect } from "react";
 import Category from "./Category";
 import { getCategories, getPopularSubreddits } from "./SubredditsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { getInitialState } from "../Posts/PostsSlice";
 
 export default function Subreddit({ token }) {
   const categories = useSelector(getCategories);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (token) {
-      console.log(`This is the access token ${token}`);
+      console.log(`This is the access token in Subreddit ${token}`);
       dispatch(getPopularSubreddits(token));
     }
   }, [token]);
-  let item = ["Nika", "Jaka"];
+
+  function getPosts(category) {
+    console.log(category);
+    dispatch(getInitialState({ token: token, category: category }));
+  }
+
   return (
     <div>
-      {item.map((item, i) => (
-        <Category item={item} key={i}></Category>
-      ))}
+      {categories.length > 0 ? (
+        categories.map((item, i) => (
+          <Category item={item} key={i} posts={getPosts}></Category>
+        ))
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

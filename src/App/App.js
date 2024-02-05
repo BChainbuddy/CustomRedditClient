@@ -33,6 +33,13 @@ function App() {
     if (token) {
       console.log(token);
       setAccessToken(token);
+      console.log(`This is access token ${accessToken}`);
+      console.log(`This is client id ${process.env.REACT_APP_CLIENTID}`);
+      console.log(
+        `This is client secret ${process.env.REACT_APP_CLIENTSECRET}`
+      );
+      console.log(`This is secret ${process.env.REACT_APP_SECRET}`);
+
       fetch("https://www.reddit.com/api/v1/access_token", {
         method: "POST",
         headers: {
@@ -54,7 +61,8 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          console.log("This is the real access token!");
+          console.log(`This is the real access token! ${data.access_token}`);
+          setAuthorizationToken(data.access_token);
         })
         .catch((error) => console.error("Error:", error));
     } else {
@@ -80,7 +88,7 @@ function App() {
       <div id="logo">
         <p>REDDITCLIENT</p>
       </div>
-      <Subreddit token={accessToken}></Subreddit>
+      <Subreddit token={authorizationToken}></Subreddit>
       <Search></Search>
       <Posts></Posts>
     </div>
