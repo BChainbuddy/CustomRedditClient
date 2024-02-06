@@ -128,20 +128,21 @@ export const getInitialState = createAsyncThunk(
       },
     };
     console.log(`This is the category ${category}`);
-    const url = `https://oauth.reddit.com/r/${category}`;
+    const url = `https://oauth.reddit.com/r/${category}?limit=100`;
 
     const response = await fetch(url, params);
     const data = await response.json();
     console.log(data.data.children);
     let list = [];
 
-    
     data.data.children.forEach((element) => {
       list.push({
         author: element.data.author,
         title: element.data.title,
         selftext: element.data.selftext,
-        media_metadata: element.data.media_metadata,
+        media_metadata: element.data.media_metadata
+          ? element.data.media_metadata
+          : undefined,
         ups: element.data.ups,
       });
     });
@@ -182,3 +183,21 @@ const slice = createSlice({
 export default slice.reducer;
 export const { search } = slice.actions;
 export const getPosts = (state) => state.postsSlice.posts;
+
+// if (
+//   element.data.media_metadata &
+//   (element.data.media_metadata.s.x > element.data.media_metadata.s.y)
+// ) {
+//   const ratio =
+//     element.data.media_metadata.s.y / element.data.media_metadata.s.x;
+//   element.data.media_metadata.s.x = 1000;
+//   element.data.media_metadata.s.y = ratio * 1000;
+// } else if (
+//   element.data.media_metadata &
+//   (element.data.media_metadata.s.x < element.data.media_metadata.s.y)
+// ) {
+//   const ratio =
+//     element.data.media_metadata.s.x / element.data.media_metadata.s.y;
+//   element.data.media_metadata.s.y = 1000;
+//   element.data.media_metadata.s.x = ratio * 1000;
+// }

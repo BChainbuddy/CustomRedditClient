@@ -39,32 +39,33 @@ function App() {
         `This is client secret ${process.env.REACT_APP_CLIENTSECRET}`
       );
       console.log(`This is secret ${process.env.REACT_APP_SECRET}`);
-
-      fetch("https://www.reddit.com/api/v1/access_token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization:
-            "Basic " +
-            btoa(
-              process.env.REACT_APP_CLIENTID +
-                ":" +
-                process.env.REACT_APP_CLIENTSECRET
-            ),
-        },
-        body: new URLSearchParams({
-          grant_type: "authorization_code",
-          code: accessToken,
-          redirect_uri: process.env.REACT_APP_REDIRECT_URI,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          console.log(`This is the real access token! ${data.access_token}`);
-          setAuthorizationToken(data.access_token);
+      if (!authorizationToken) {
+        fetch("https://www.reddit.com/api/v1/access_token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization:
+              "Basic " +
+              btoa(
+                process.env.REACT_APP_CLIENTID +
+                  ":" +
+                  process.env.REACT_APP_CLIENTSECRET
+              ),
+          },
+          body: new URLSearchParams({
+            grant_type: "authorization_code",
+            code: accessToken,
+            redirect_uri: process.env.REACT_APP_REDIRECT_URI,
+          }),
         })
-        .catch((error) => console.error("Error:", error));
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            console.log(`This is the real access token! ${data.access_token}`);
+            setAuthorizationToken(data.access_token);
+          })
+          .catch((error) => console.error("Error:", error));
+      }
     } else {
       console.log("b happens");
       const scope =
