@@ -1,0 +1,17 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(5, 200px);
+  grid-template-rows: repeat(2, 50px);
+  border: 1px solid black;
+  margin: 0 auto;
+  width: 80%;
+  border-radius: 40px;
+  margin-top: 40px;
+  align-items: center;
+  justify-content: center;
+}

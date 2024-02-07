@@ -1,3 +1,5 @@
+import "../styles/Search.css";
+
 export default function Search() {
-  return <div>This is the search section</div>;
+  return <div className="search">This is the search section</div>;
 }

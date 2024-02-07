@@ -1,9 +1,9 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Subreddit from "../Features/Subreddits/Subreddits";
 import Search from "../Components/Search";
 import Posts from "../Features/Posts/Posts";
 import { useEffect, useState } from "react";
+import Link from "react";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -33,7 +33,7 @@ function App() {
     if (token) {
       console.log(token);
       setAccessToken(token);
-      console.log(`This is access token ${accessToken}`);
+      console.log(`This is the access token ${token}`);
       console.log(`This is client id ${process.env.REACT_APP_CLIENTID}`);
       console.log(
         `This is client secret ${process.env.REACT_APP_CLIENTSECRET}`
@@ -92,6 +92,9 @@ function App() {
       <Subreddit token={authorizationToken}></Subreddit>
       <Search></Search>
       <Posts></Posts>
+      <a href="#">
+        <div className="top">BACK TO TOP</div>
+      </a>
     </div>
   );
 }
