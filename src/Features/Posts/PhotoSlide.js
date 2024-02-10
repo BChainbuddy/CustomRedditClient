@@ -24,7 +24,7 @@ export default function PhotoSlide({ media }) {
         <></>
       )}
       <img
-        src={`${media[photoIndex].s.u.replace(/&amp;/g, "&")}`}
+        src={media[photoIndex].s.u.replace(/&amp;/g, "&")}
         width={
           media[photoIndex].s.x > media[photoIndex].s.y
             ? maxSize

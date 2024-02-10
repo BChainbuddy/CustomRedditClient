@@ -7,11 +7,17 @@
   display: grid;
   grid-template-columns: repeat(5, 200px);
   grid-template-rows: repeat(2, 50px);
-  border: 1px solid black;
   margin: 0 auto;
   width: 80%;
   border-radius: 40px;
   margin-top: 40px;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(0.35turn, #1167b080, #59a8e080, #1c70b840);
+  padding: 10px 0;
+}
+
+.noCategories {
+  grid-column: 3;
+  grid-row: 1 / span 2;
 }

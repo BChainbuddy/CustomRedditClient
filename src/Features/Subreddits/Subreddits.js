@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import Category from "./Category";
-import { getCategories, getPopularSubreddits } from "./SubredditsSlice";
+import {
+  getCategories,
+  getPopularSubreddits,
+  category,
+} from "./SubredditsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getInitialState } from "../Posts/PostsSlice";
 import "../../styles/Subreddits.css";
@@ -16,9 +20,10 @@ export default function Subreddit({ token }) {
     }
   }, [token]);
 
-  function getPosts(category) {
-    console.log(category);
-    dispatch(getInitialState({ token: token, category: category }));
+  function getPosts(subreddit) {
+    console.log(subreddit);
+    dispatch(getInitialState({ token: token, category: subreddit }));
+    dispatch(category(subreddit));
   }
 
   return (
@@ -28,7 +33,7 @@ export default function Subreddit({ token }) {
           <Category item={item} key={i} posts={getPosts}></Category>
         ))
       ) : (
-        <div></div>
+        <p className="noCategories">Reload the web page...</p>
       )}
     </div>
   );

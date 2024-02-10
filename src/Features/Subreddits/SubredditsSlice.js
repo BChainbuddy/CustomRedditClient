@@ -21,7 +21,10 @@ export const getPopularSubreddits = createAsyncThunk(
     let list = [];
 
     data.data.children.forEach((item) => {
-      list.push(item.data.display_name);
+      list.push({
+        display_name: item.data.display_name,
+        icon_img: item.data.icon_img,
+      });
     });
 
     console.log("Works!");
@@ -33,13 +36,17 @@ export const getPopularSubreddits = createAsyncThunk(
 const slice = createSlice({
   name: "Subreddit",
   initialState: {
+    chosenCategory: "",
     isLoading: false,
     hasError: false,
     categories: [],
   },
   reducers: {
     category: (state, action) => {
-      //
+      state.chosenCategory = action.payload;
+      console.log(
+        `This is the action payload in subreddit slice ${action.payload}`
+      );
     },
   },
   extraReducers: (builder) => {
@@ -63,3 +70,4 @@ const slice = createSlice({
 export default slice.reducer;
 export const { category } = slice.actions;
 export const getCategories = (state) => state.subredditSlice.categories;
+export const getChosenCategory = (state) => state.subredditSlice.chosenCategory;

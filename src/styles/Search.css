@@ -3,8 +3,23 @@
   margin: 0;
 }
 
-.search {
+.searchSection {
   display: flex;
   justify-content: center;
   margin-top: 50px;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.label {
+  margin-right: 4px;
+}
+
+.search {
+  margin-right: 4px;
+  border-radius: 5px;
+  background: #1c70b817;
+  border: none;
+  padding: 5px;
 }

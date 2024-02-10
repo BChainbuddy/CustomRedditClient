@@ -143,7 +143,10 @@ export const getInitialState = createAsyncThunk(
         media_metadata: element.data.media_metadata
           ? element.data.media_metadata
           : undefined,
+        preview: element.data.preview,
         ups: element.data.ups,
+        id: element.data.id,
+        voted: 0,
       });
     });
     console.log("Works!");
@@ -152,9 +155,73 @@ export const getInitialState = createAsyncThunk(
   }
 );
 
+//    `https://oauth.reddit.com/r/Home/search?q=${e}&sort=hot&limit=100`
+
+export const searchSubreddit = createAsyncThunk(
+  "/Posts/SearchSubreddit",
+  async ({ token, category, searchParams }) => {
+    const params = {
+      method: "GET",
+      headers: {
+        Authorization: `bearer ${token}`,
+        "User-Agent":
+          "android:com.example.redditclient:v1.0.0 (by /u/bchainbuddy)",
+      },
+    };
+    const url = `https://oauth.reddit.com/r/${category}/search?q=${searchParams}&sort=hot&limit=100`;
+
+    const response = await fetch(url, params);
+    const data = await response.json();
+    console.log(data.data.children);
+    let list = [];
+
+    data.data.children.forEach((element) => {
+      list.push({
+        author: element.data.author,
+        title: element.data.title,
+        selftext: element.data.selftext,
+        media_metadata: element.data.media_metadata
+          ? element.data.media_metadata
+          : undefined,
+        preview: element.data.preview,
+        ups: element.data.ups,
+        id: element.data.id,
+        voted: 0,
+      });
+    });
+    console.log("Works!");
+    console.log(list);
+    return list;
+  }
+);
+
+export const vote = createAsyncThunk(
+  "/Posts/Vote",
+  async ({ token, direction, id }) => {
+    const params = {
+      method: "POST",
+      headers: {
+        Authorization: `bearer ${token}`,
+        "User-Agent":
+          "android:com.example.redditclient:v1.0.0 (by /u/bchainbuddy)",
+      },
+    };
+    const url = `https://oauth.reddit.com/api/vote?dir=${direction}&id=${`t3_${id}`}`;
+
+    const response = await fetch(url, params);
+    const data = await response.json();
+    console.log(data);
+  }
+);
+
 const slice = createSlice({
   name: "Posts",
-  initialState: { posts: [], hasError: false, isLoading: false },
+  initialState: {
+    chosenCategory: "",
+    posts: [],
+    hasError: false,
+    isLoading: false,
+  },
   reducers: {
     search: (state, action) => {
       state.filter((item) => {
@@ -176,28 +243,25 @@ const slice = createSlice({
         state.isLoading = false;
         state.hasError = false;
         state.posts = action.payload;
-      });
+      })
+      .addCase(searchSubreddit.pending, (state) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(searchSubreddit.rejected, (state) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(searchSubreddit.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.hasError = false;
+        state.posts = action.payload;
+      })
   },
 });
 
 export default slice.reducer;
 export const { search } = slice.actions;
 export const getPosts = (state) => state.postsSlice.posts;
-
-// if (
-//   element.data.media_metadata &
-//   (element.data.media_metadata.s.x > element.data.media_metadata.s.y)
-// ) {
-//   const ratio =
-//     element.data.media_metadata.s.y / element.data.media_metadata.s.x;
-//   element.data.media_metadata.s.x = 1000;
-//   element.data.media_metadata.s.y = ratio * 1000;
-// } else if (
-//   element.data.media_metadata &
-//   (element.data.media_metadata.s.x < element.data.media_metadata.s.y)
-// ) {
-//   const ratio =
-//     element.data.media_metadata.s.x / element.data.media_metadata.s.y;
-//   element.data.media_metadata.s.y = 1000;
-//   element.data.media_metadata.s.x = ratio * 1000;
-// }
+export const loadingPosts = (state) => state.postsSlice.isLoading;
+export const errorLoading = (state) => state.postsSlice.hasError;

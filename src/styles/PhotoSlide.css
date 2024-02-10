@@ -14,10 +14,12 @@
   transform: rotate(-90deg);
   height: 35px;
   width: 35px;
+  cursor: pointer;
 }
 
 .backButton {
   transform: rotate(90deg);
   height: 35px;
   width: 35px;
+  cursor: pointer;
 }
