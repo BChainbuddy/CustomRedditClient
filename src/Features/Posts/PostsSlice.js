@@ -147,6 +147,7 @@ export const getInitialState = createAsyncThunk(
         ups: element.data.ups,
         id: element.data.id,
         voted: 0,
+        comments: "",
       });
     });
     console.log("Works!");
@@ -187,6 +188,7 @@ export const searchSubreddit = createAsyncThunk(
         ups: element.data.ups,
         id: element.data.id,
         voted: 0,
+        comments: "",
       });
     });
     console.log("Works!");
@@ -197,7 +199,7 @@ export const searchSubreddit = createAsyncThunk(
 
 export const vote = createAsyncThunk(
   "/Posts/Vote",
-  async ({ token, direction, id }) => {
+  async ({ token, direction, id, post }) => {
     const params = {
       method: "POST",
       headers: {
@@ -206,11 +208,53 @@ export const vote = createAsyncThunk(
           "android:com.example.redditclient:v1.0.0 (by /u/bchainbuddy)",
       },
     };
-    const url = `https://oauth.reddit.com/api/vote?dir=${direction}&id=${`t3_${id}`}`;
-
+    let url;
+    if (post) {
+      url = `https://oauth.reddit.com/api/vote?dir=${direction}&id=${`t3_${id}`}`;
+    } else {
+      url = `https://oauth.reddit.com/api/vote?dir=${direction}&id=${`t1_${id}`}`;
+    }
     const response = await fetch(url, params);
     const data = await response.json();
     console.log(data);
+  }
+);
+
+export const fetchComments = createAsyncThunk(
+  "/Posts/PostComments",
+  async ({ token, id, category }) => {
+    console.log("Fetching comments!");
+    console.log(category);
+    console.log(id);
+    const params = {
+      method: "GET",
+      headers: {
+        Authorization: `bearer ${token}`,
+        "User-Agent":
+          "android:com.example.redditclient:v1.0.0 (by /u/bchainbuddy)",
+      },
+    };
+    const url = `https://oauth.reddit.com/r/${category}/comments/${id}?sort=top&limit=100`;
+    console.log(url);
+    // 1anxv4e
+    const response = await fetch(url, params);
+    const data = await response.json();
+    console.log(data);
+    let list = [];
+    data[1].data.children.forEach((element) => {
+      list.push({
+        author: element.data.author,
+        body: element.data.body,
+        replies: element.data.replies,
+        ups: element.data.ups,
+        showReplies: false,
+        id: element.data.id,
+      });
+    });
+    console.log("Works!");
+    console.log(list);
+    return { list: list, id: id };
+    // 1.author, body, replies, ups
   }
 );
 
@@ -227,6 +271,14 @@ const slice = createSlice({
       state.filter((item) => {
         item.includes(action.payload);
       });
+    },
+    closeComment: (state, action) => {
+      function removeComment(item) {
+        if (item.id === action.payload) {
+          item.comments = "";
+        }
+      }
+      state.posts.map((item) => removeComment(item));
     },
   },
   extraReducers: (builder) => {
@@ -257,11 +309,22 @@ const slice = createSlice({
         state.hasError = false;
         state.posts = action.payload;
       })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        function addComments(item) {
+          if (item.id === action.payload.id) {
+            console.log(`This is the item ${item.id}`);
+            item.comments = action.payload.list;
+          }
+        }
+        state.posts.map((item) => {
+          addComments(item);
+        });
+      });
   },
 });
 
 export default slice.reducer;
-export const { search } = slice.actions;
+export const { search, closeComment } = slice.actions;
 export const getPosts = (state) => state.postsSlice.posts;
 export const loadingPosts = (state) => state.postsSlice.isLoading;
 export const errorLoading = (state) => state.postsSlice.hasError;

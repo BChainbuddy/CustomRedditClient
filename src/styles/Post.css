@@ -6,7 +6,7 @@
 .post {
   margin: 0 auto;
   display: flex;
-  margin: 30px 0;
+  margin-top: 30px;
   width: 500px;
   justify-content: center;
   justify-items: center;
@@ -19,7 +19,6 @@
 
 .upvote {
   width: 15%;
-  justify-items: center;
   text-align: center;
   font-size: 16px;
 }
@@ -40,12 +39,16 @@
   /* border: 1px solid blue; */
   font-size: 18px;
   margin-bottom: 20px;
+  padding-left: 10px;
+
 }
 
 .text {
   /* border: 1px solid green; */
   font-size: 16px;
   text-align: justify;
+  padding-left: 10px;
+
 }
 
 .voteUp {
@@ -91,4 +94,33 @@
 .votedDOWN {
   opacity: 1;
   color: #e3242b;
+}
+
+.commentsIcon {
+  cursor: pointer;
+}
+
+/* .commentSectionBefore {
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: 1s ease-out;
+} */
+
+.commentSection {
+  transform: translateY(0px);
+  opacity: 1;
+  margin: 0 auto;
+  display: flex;
+  width: 480px;
+  justify-content: center;
+  justify-items: center;
+  overflow-wrap: break-word;
+  background: #609bcd15;
+  border-radius: 0 0 15px 15px;
+  padding: 20px 0;
+  flex-direction: column;
+}
+
+.commentsIcon {
+  margin: 0px 0px 0px 400px;
 }
