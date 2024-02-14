@@ -9,6 +9,7 @@ import { Comment } from "./Comments";
 export default function Post({ item, token }) {
   const maxSize = 300;
   const [voted, setVoted] = useState();
+  const [animateComments, setAnimateComments] = useState(false);
 
   const dispatch = useDispatch();
   const category = useSelector(getChosenCategory);
@@ -28,6 +29,9 @@ export default function Post({ item, token }) {
       dispatch(
         fetchComments({ token: token, id: item.id, category: category })
       );
+      setTimeout(() => {
+        setAnimateComments(true);
+      }, 1000);
     } else {
       console.log("Closing the comments!");
       dispatch(closeComment(item.id));
@@ -35,7 +39,7 @@ export default function Post({ item, token }) {
   }
 
   return (
-    <div>
+    <div className="postContainer">
       <div className="post">
         <div className="upvote">
           <svg
@@ -145,11 +149,7 @@ export default function Post({ item, token }) {
         </div>
       </div>
       {item.comments !== "" ? (
-        <div
-          className={`commentSectionBefore ${
-            item.comments !== "" ? "commentSection" : ""
-          }`}
-        >
+        <div className="commentSection">
           {item.comments.map((comment, i) => (
             <Comment comment={comment} token={token} key={i}></Comment>
           ))}

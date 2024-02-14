@@ -1,0 +1,56 @@
+.replyAuthor {
+  font-size: 14px;
+  margin-bottom: 5px;
+  width: fit-content;
+  border-bottom: 1px solid black;
+}
+
+.replyBody {
+  font-size: 14px;
+}
+
+.replyUps {
+  font-size: 12px;
+}
+
+.reply {
+  background: #609bcd25;
+  margin: 20px 25px 0px 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  padding: 20px 10px;
+  /* border: 1px solid red; */
+  width: 82%;
+  margin-left: auto;
+}
+
+.replyUpvote {
+  width: 12%;
+  text-align: center;
+  font-size: 16px;
+}
+
+.replyList {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid green; */
+  margin-left: auto;
+}
+
+.repliedTo {
+  font-size: 10px;
+  margin: 0 auto;
+  margin-top: 8px;
+}
+
+.replyVotedUP {
+  opacity: 1;
+  color: #00c04b;
+}
+
+.replyVotedDOWN {
+  opacity: 1;
+  color: #e3242b;
+}

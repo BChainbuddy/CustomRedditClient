@@ -23,6 +23,8 @@
 .commentAuthor {
   font-size: 14px;
   margin-bottom: 5px;
+  border-bottom: 1px solid black;
+  width: fit-content;
 }
 
 .commentBody {
@@ -46,7 +48,7 @@
   height: 15px;
   width: 15px;
   transform: rotate(180deg);
-  margin-top: 1px;
+  margin-top: 3px;
   opacity: 60%;
   transition: all 0.3s ease-out;
   cursor: pointer;
@@ -68,34 +70,6 @@
   margin-top: 6px;
 }
 
-.replyAuthor {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.replyBody {
-  font-size: 14px;
-}
-
-.replyUps {
-  font-size: 12px;
-}
-
-.reply {
-  background: #609bcd25;
-  margin: 10px 25px 0px 30px;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: row;
-  padding: 20px 10px;
-}
-
-.replyUpvote {
-  width: 12%;
-  text-align: center;
-  font-size: 16px;
-}
-
 .replyContent {
   width: 88%;
   display: flex;
@@ -111,4 +85,14 @@
 .commentVotedDOWN {
   opacity: 1;
   color: #e3242b;
+}
+
+.replySection {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: end;
+  justify-items: end; */
+  align-items: flex-end;
+  /* align-content: end; */
+  /* border: 1px solid black; */
 }

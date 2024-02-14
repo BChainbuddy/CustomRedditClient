@@ -89,58 +89,19 @@ export function Comment({ comment, token }) {
           )}
         </div>
       </div>
-      <div>
-        {comment.replies && seeReplies ? (
-          <div>
-            {comment.replies.data.children.map((item, i) => (
-              <div className="reply" key={i}>
-                <div className="replyUpvote">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    // className={`voteUp ${voted === 1 ? "votedUP" : ""}`}
-                    className="commentUp"
-                    //   onClick={() => {
-                    //     votePost(1);
-                    //   }}
-                  >
-                    <path
-                      d="m19.707 9.293-7-7a1 1 0 0 0-1.414 0l-7 7A1 1 0 0 0 5 11h3v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V11h3a1 1 0 0 0 .707-1.707zM15 9a1 1 0 0 0-1 1v10h-4V10a1 1 0 0 0-1-1H7.414L12 4.414 16.586 9z"
-                      // style={{
-                      //   fill: voted === 1 ? "#00c04b" : "#1c1b1e",
-                      // }}
-                    />
-                  </svg>
-                  <p className="replyUps">{item.data.ups}</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    // className={`voteDown ${voted === -1 ? "votedDOWN" : ""}`}
-                    className="commentDown"
-                    //   onClick={() => {
-                    //     votePost(-1);
-                    //   }}
-                  >
-                    <path
-                      d="m19.707 9.293-7-7a1 1 0 0 0-1.414 0l-7 7A1 1 0 0 0 5 11h3v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V11h3a1 1 0 0 0 .707-1.707zM15 9a1 1 0 0 0-1 1v10h-4V10a1 1 0 0 0-1-1H7.414L12 4.414 16.586 9z"
-                      // style={{ fill: voted === -1 ? "#E3242B" : "#1c1b1e" }}
-                    />
-                  </svg>
-                </div>
-                <div className="replyContent">
-                  <p className="replyAuthor">
-                    {item.data.author ? item.data.author : "Anonymous reader"}
-                  </p>
-                  <p className="replyBody">{item.data.body}</p>
-                </div>
-                {/* <Reply item={item.data} key={i}></Reply> */}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
+      {comment.replies && seeReplies ? (
+        <div className="replySection">
+          {comment.replies.data.children.map((item, i) => (
+            <Reply
+              item={item}
+              repliedAuthor={comment.author}
+              token={token}
+            ></Reply>
+          ))}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

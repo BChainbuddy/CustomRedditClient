@@ -242,14 +242,16 @@ export const fetchComments = createAsyncThunk(
     console.log(data);
     let list = [];
     data[1].data.children.forEach((element) => {
-      list.push({
-        author: element.data.author,
-        body: element.data.body,
-        replies: element.data.replies,
-        ups: element.data.ups,
-        showReplies: false,
-        id: element.data.id,
-      });
+      if (element.data.body) {
+        list.push({
+          author: element.data.author,
+          body: element.data.body,
+          replies: element.data.replies,
+          ups: element.data.ups,
+          showReplies: false,
+          id: element.data.id,
+        });
+      }
     });
     console.log("Works!");
     console.log(list);
