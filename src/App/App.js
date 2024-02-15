@@ -55,13 +55,7 @@ function App() {
     if (token) {
       console.log(token);
       setAccessToken(token);
-      console.log("LOOPED HERE");
       // console.log(`This is the access token ${token}`);
-      // console.log(`This is client id ${process.env.REACT_APP_CLIENTID}`);
-      // console.log(
-      //   `This is client secret ${process.env.REACT_APP_CLIENTSECRET}`
-      // );
-      // console.log(`This is secret ${process.env.REACT_APP_SECRET}`);
       if (!authorizationToken) {
         fetch("https://www.reddit.com/api/v1/access_token", {
           method: "POST",
@@ -94,11 +88,11 @@ function App() {
           })
           .catch((error) => {
             console.error("Error:", error);
-            getRedirected();
+            // window.location.href = process.env.REACT_APP_REDIRECT_URI;
           });
       }
     } else {
-      console.log("b happens");
+      console.log("b happens"); 
       getRedirected();
     }
   }, [accessToken]);
