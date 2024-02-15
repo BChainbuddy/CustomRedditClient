@@ -2,13 +2,12 @@ import { ReplyList } from "./ReplyList";
 import "../../styles/Reply.css";
 import { useDispatch } from "react-redux";
 import { vote } from "./PostsSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function Reply({ item, repliedAuthor, token }) {
   const [voted, setVoted] = useState(0);
   const [seeReplies, setSeeReplies] = useState(false);
-
-  console.log(item);
+  const [animateReply, setAnimateReply] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -33,10 +32,21 @@ export function Reply({ item, repliedAuthor, token }) {
       setVoted(dir);
     }
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAnimateReply(true);
+    }, 300);
+  }, []);
+
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       {item.data.body ? (
-        <div className="reply">
+        <div
+          className={`reply ${
+            animateReply ? "replyVisible" : "replyInvisible"
+          }`}
+        >
           <div className="replyUpvote">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -84,10 +94,14 @@ export function Reply({ item, repliedAuthor, token }) {
             </p>
             <p className="replyBody">{item.data.body}</p>
             <p className="repliedTo">Replied to {repliedAuthor}</p>
-            {item.data.replies && item.data.body ? (
-              <p className="seeReplies" onClick={() => toggleReplies()}>
-                {seeReplies ? "hide replies" : "see replies"}
-              </p>
+            {item.data.replies.data && item.data.body ? (
+              item.data.replies.data.children[0].data.body ? (
+                <p className="seeReplies" onClick={() => toggleReplies()}>
+                  {seeReplies ? "hide replies" : "see replies"}
+                </p>
+              ) : (
+                <></>
+              )
             ) : (
               <></>
             )}

@@ -70,4 +70,5 @@ const slice = createSlice({
 export default slice.reducer;
 export const { category } = slice.actions;
 export const getCategories = (state) => state.subredditSlice.categories;
+export const categoriesState = (state) => state.subredditSlice;
 export const getChosenCategory = (state) => state.subredditSlice.chosenCategory;

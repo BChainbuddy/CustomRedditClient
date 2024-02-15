@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/Post.css";
 import PhotoSlide from "./PhotoSlide";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,14 +29,24 @@ export default function Post({ item, token }) {
       dispatch(
         fetchComments({ token: token, id: item.id, category: category })
       );
-      setTimeout(() => {
-        setAnimateComments(true);
-      }, 1000);
+      // setTimeout(() => {
+      //   setAnimateComments(true);
+      // }, 1000);
     } else {
-      console.log("Closing the comments!");
       dispatch(closeComment(item.id));
     }
   }
+
+  useEffect(() => {
+    if (item.comments !== "") {
+      setTimeout(() => {
+        setAnimateComments(true);
+      }, 1000);
+    }
+    if (item.comments === "") {
+      setAnimateComments(false);
+    }
+  }, [item]);
 
   return (
     <div className="postContainer">
@@ -149,7 +159,11 @@ export default function Post({ item, token }) {
         </div>
       </div>
       {item.comments !== "" ? (
-        <div className="commentSection">
+        <div
+          className={`commentSectionBefore ${
+            animateComments === true ? "commentSection" : ""
+          }`}
+        >
           {item.comments.map((comment, i) => (
             <Comment comment={comment} token={token} key={i}></Comment>
           ))}

@@ -55,12 +55,13 @@ function App() {
     if (token) {
       console.log(token);
       setAccessToken(token);
-      console.log(`This is the access token ${token}`);
-      console.log(`This is client id ${process.env.REACT_APP_CLIENTID}`);
-      console.log(
-        `This is client secret ${process.env.REACT_APP_CLIENTSECRET}`
-      );
-      console.log(`This is secret ${process.env.REACT_APP_SECRET}`);
+      console.log("LOOPED HERE");
+      // console.log(`This is the access token ${token}`);
+      // console.log(`This is client id ${process.env.REACT_APP_CLIENTID}`);
+      // console.log(
+      //   `This is client secret ${process.env.REACT_APP_CLIENTSECRET}`
+      // );
+      // console.log(`This is secret ${process.env.REACT_APP_SECRET}`);
       if (!authorizationToken) {
         fetch("https://www.reddit.com/api/v1/access_token", {
           method: "POST",
@@ -80,14 +81,20 @@ function App() {
             redirect_uri: process.env.REACT_APP_REDIRECT_URI,
           }),
         })
-          .then((res) => res.json())
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return res.json();
+          })
           .then((data) => {
             console.log(data);
-            console.log(`This is the real access token! ${data.access_token}`);
+            // console.log(`This is the real access token! ${data.access_token}`);
             setAuthorizationToken(data.access_token);
           })
           .catch((error) => {
             console.error("Error:", error);
+            getRedirected();
           });
       }
     } else {

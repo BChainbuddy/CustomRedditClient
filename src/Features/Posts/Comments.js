@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "../../styles/Comment.css";
 import { Reply } from "./Reply";
 import { vote } from "./PostsSlice";
+import { ReplyList } from "./ReplyList";
 
 export function Comment({ comment, token }) {
   const [seeReplies, setSeeReplies] = useState(false);
@@ -19,7 +20,6 @@ export function Comment({ comment, token }) {
   }
 
   function voteComment(dir) {
-    console.log(comment.id);
     if (voted === dir) {
       dispatch(
         vote({ token: token, direction: 0, id: comment.id, post: false })
@@ -80,10 +80,14 @@ export function Comment({ comment, token }) {
         <div className="commentContent">
           <p className="commentAuthor">{comment.author}</p>
           <p className="commentBody">{comment.body}</p>
-          {comment.replies ? (
-            <p className="seeReplies" onClick={() => toggleReplies()}>
-              {seeReplies ? "hide replies" : "see replies"}
-            </p>
+          {comment.replies.data ? (
+            comment.replies.data.children[0].data.body ? (
+              <p className="seeReplies" onClick={() => toggleReplies()}>
+                {seeReplies ? "hide replies" : "see replies"}
+              </p>
+            ) : (
+              <></>
+            )
           ) : (
             <></>
           )}
@@ -91,13 +95,11 @@ export function Comment({ comment, token }) {
       </div>
       {comment.replies && seeReplies ? (
         <div className="replySection">
-          {comment.replies.data.children.map((item, i) => (
-            <Reply
-              item={item}
-              repliedAuthor={comment.author}
-              token={token}
-            ></Reply>
-          ))}
+          <ReplyList
+            item={comment.replies.data.children}
+            repliedAuthor={comment.author}
+            token={token}
+          ></ReplyList>
         </div>
       ) : (
         <></>
