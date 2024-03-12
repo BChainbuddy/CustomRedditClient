@@ -15,6 +15,7 @@
   justify-content: center;
   background: linear-gradient(0.35turn, #1167b080, #59a8e080, #1c70b840);
   padding: 10px 0;
+  gap: 5px 20px;
 }
 
 .noCategories {

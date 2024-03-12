@@ -1,8 +1,13 @@
 * {
   margin: 0;
   padding: 0;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge: this hides the scrollbar but does not overlay it */
+  scrollbar-width: thin; /* Firefox: makes scrollbar take minimal space */
+  scrollbar-color: lightblue transparent; /* Firefox: scrollbar color and scrollbar track color */
+}
+
+html {
+  -webkit-overflow-scrolling: touch; /* Enables "overlay" scrollbars in WebKit-based browsers */
 }
 
 #logo {
@@ -13,6 +18,26 @@
   align-items: center;
 }
 
+/* Chrome, Safari, Opera */
 *::-webkit-scrollbar {
-  display: none;
+  width: 12px; /* Scrollbar width */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: lightblue; /* Scrollbar color */
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: darken(lightblue, 10%); /* Optional: slight darkening on hover */
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent; /* Scrollbar track color */
+}
+
+html,
+body {
+  width: 100vw; /* Viewport width: ensures the scrollbar does not push content */
+  overflow-x: hidden; /* Prevents horizontal scrolling caused by vertical scrollbar */
 }
